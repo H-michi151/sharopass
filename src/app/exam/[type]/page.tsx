@@ -87,7 +87,7 @@ export default function ExamPage() {
           <div style={{ 
             width: '40px', 
             height: '40px', 
-            border: '3px solid rgba(255,255,255,0.1)', 
+            border: '3px solid var(--color-border)', 
             borderTopColor: 'var(--color-accent)', 
             borderRadius: '50%', 
             animation: 'spin 1s linear infinite',
@@ -217,7 +217,7 @@ export default function ExamPage() {
           <div style={{ position: 'sticky', top: '92px' }}>
             <QuestionNav onSubmit={isReviewMode ? undefined : handleSubmit} />
             {!isReviewMode && (
-              <div style={{ marginTop: '24px', padding: '16px', borderRadius: 'var(--radius)', background: 'rgba(232, 160, 32, 0.05)', border: '1px dashed var(--color-border)' }}>
+              <div style={{ marginTop: '24px', padding: '16px', borderRadius: 'var(--radius)', background: 'rgba(37, 99, 235, 0.04)', border: '1px dashed var(--color-border)' }}>
                 <h4 style={{ fontSize: '0.85rem', fontWeight: 700, marginBottom: '8px', color: 'var(--color-accent)' }}>ショートカット</h4>
                 <ul style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', listStyle: 'none', padding: 0 }}>
                   <li>・矢印キーで前後の問題へ</li>

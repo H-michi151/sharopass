@@ -59,7 +59,7 @@ export default function TakuitsuQuestion({ question }: TakuitsuQuestionProps) {
                   ? 'rgba(46, 204, 113, 0.1)'
                   : isWrong
                     ? 'rgba(231, 76, 60, 0.1)'
-                    : isSelected ? 'rgba(232,160,32,0.1)' : 'var(--color-bg-card)',
+                    : isSelected ? 'rgba(37,99,235,0.08)' : 'var(--color-bg-card)',
                 textAlign: 'left',
                 cursor: isCompleted ? 'default' : 'pointer',
                 transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -87,7 +87,7 @@ export default function TakuitsuQuestion({ question }: TakuitsuQuestionProps) {
                   : isWrong 
                     ? 'var(--color-error)' 
                     : isSelected ? 'var(--color-accent)' : 'transparent',
-                color: (isSelected || isCorrect || isWrong) ? 'var(--color-primary)' : 'var(--color-text-muted)',
+                color: (isSelected || isCorrect || isWrong) ? 'white' : 'var(--color-text-muted)',
               }}>
                 {choiceNum}
               </div>
@@ -137,7 +137,7 @@ export default function TakuitsuQuestion({ question }: TakuitsuQuestionProps) {
         <div style={{ 
           marginTop: '32px', 
           padding: '24px', 
-          background: 'rgba(255,255,255,0.05)', 
+          background: 'var(--color-bg-elevated)', 
           borderRadius: 'var(--radius)',
           borderLeft: '4px solid var(--color-success)',
           animation: 'slideInUp 0.5s ease-out'
@@ -145,7 +145,7 @@ export default function TakuitsuQuestion({ question }: TakuitsuQuestionProps) {
           <h4 style={{ color: 'var(--color-success)', marginBottom: '8px', fontSize: '1rem', fontWeight: 'bold' }}>
             解説
           </h4>
-          <p style={{ fontSize: '1rem', lineHeight: 1.7, color: '#eee', margin: 0 }}>
+          <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--color-text)', margin: 0 }}>
             {question.explanation}
           </p>
         </div>

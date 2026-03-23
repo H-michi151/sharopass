@@ -67,13 +67,13 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
           fontSize: '1.25rem', 
           lineHeight: 2, 
           whiteSpace: 'pre-wrap',
-          background: 'rgba(255,255,255,0.05)',
+          background: 'var(--color-bg-elevated)',
           padding: '32px',
           borderRadius: 'var(--radius)',
           border: '1px solid var(--color-border)',
           position: 'relative',
-          boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)',
-          color: '#fff'
+          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.05)',
+          color: 'var(--color-text)'
         }}>
           {question.text}
         </div>
@@ -113,7 +113,7 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
                       ? 'rgba(var(--color-success-rgb), 0.15)' 
                       : isWrong 
                         ? 'rgba(var(--color-error-rgb), 0.15)'
-                        : isActive ? 'rgba(var(--color-accent-rgb), 0.15)' : 'rgba(255,255,255,0.07)',
+                        : isActive ? 'rgba(37,99,235,0.1)' : 'var(--color-bg-elevated)',
                     border: `2px solid ${
                       isCorrect ? 'var(--color-success)' : isWrong ? 'var(--color-error)' : isActive ? 'var(--color-accent)' : 'var(--color-border)'
                     }`,
@@ -142,7 +142,7 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
                     <div style={{ 
                       fontSize: '1.05rem', 
                       fontWeight: 600,
-                      color: isSelected ? '#fff' : 'var(--color-text-muted)',
+                      color: isSelected ? 'var(--color-text)' : 'var(--color-text-muted)',
                       overflow: 'hidden', 
                       textOverflow: 'ellipsis', 
                       whiteSpace: 'nowrap' 
@@ -179,7 +179,7 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
             display: 'grid', 
             gridTemplateColumns: 'repeat(2, 1fr)', 
             gap: '10px',
-            background: 'rgba(0,0,0,0.3)',
+            background: 'var(--color-bg-elevated)',
             padding: '20px',
             borderRadius: 'var(--radius)',
             border: '2px solid var(--color-border)'
@@ -209,16 +209,16 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
                     height: 'auto',
                     minHeight: '48px',
                     background: isActiveBlankChoice
-                      ? 'rgba(var(--color-accent-rgb), 0.25)'
-                      : usedByOtherBlank ? 'rgba(255,255,255,0.02)' : 'rgba(255,255,255,0.08)',
-                    opacity: usedByOtherBlank ? 0.35 : 1,
+                      ? 'rgba(37,99,235,0.1)'
+                      : usedByOtherBlank ? 'var(--color-bg-elevated)' : 'var(--color-bg-elevated)',
+                    opacity: usedByOtherBlank ? 0.45 : 1,
                     border: isActiveBlankChoice
                       ? '1px solid var(--color-accent)'
-                      : usedByOtherBlank ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(255,255,255,0.15)',
+                      : usedByOtherBlank ? '1px solid var(--color-border)' : '1px solid var(--color-border)',
                     display: 'flex',
                     alignItems: 'center',
                     gap: '12px',
-                    color: usedByOtherBlank ? 'var(--color-text-muted)' : '#eee',
+                    color: usedByOtherBlank ? 'var(--color-text-muted)' : 'var(--color-text)',
                     cursor: isCompleted || usedByOtherBlank ? 'not-allowed' : 'pointer',
                     textDecoration: usedByOtherBlank ? 'line-through' : 'none',
                   }}
@@ -245,7 +245,7 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
         <div style={{ 
           marginTop: '32px', 
           padding: '24px', 
-          background: 'rgba(255,255,255,0.05)', 
+          background: 'var(--color-bg-elevated)', 
           borderRadius: 'var(--radius)',
           borderLeft: '4px solid var(--color-success)',
           animation: 'slideInUp 0.5s ease-out'
@@ -253,7 +253,7 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
           <h4 style={{ color: 'var(--color-success)', marginBottom: '8px', fontSize: '1rem', fontWeight: 'bold' }}>
             解説
           </h4>
-          <p style={{ fontSize: '1rem', lineHeight: 1.7, color: '#eee', margin: 0 }}>
+          <p style={{ fontSize: '1rem', lineHeight: 1.7, color: 'var(--color-text)', margin: 0 }}>
             {question.explanation}
           </p>
         </div>
