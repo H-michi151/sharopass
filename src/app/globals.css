@@ -1,24 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --color-primary: #1e3a5f;
-  --color-primary-light: #2d5a8e;
-  --color-accent: #e8a020;
-  --color-accent-light: #f5c060;
-  --color-bg: #0f1c2e;
-  --color-bg-card: #162235;
-  --color-bg-elevated: #1e3048;
-  --color-text: #e8edf2;
-  --color-text-muted: #8a9bb0;
-  --color-border: #2a3f57;
-  --color-success: #2ecc71;
-  --color-error: #e74c3c;
-  --color-warning: #f39c12;
-  --color-info: #3498db;
+  --color-primary: #2563eb;
+  --color-primary-light: #3b82f6;
+  --color-accent: #2563eb;
+  --color-accent-light: #60a5fa;
+  --color-bg: #f8fafc;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #f1f5f9;
+  --color-text: #1e293b;
+  --color-text-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+  --color-warning: #d97706;
+  --color-info: #0284c7;
   --radius: 12px;
   --radius-sm: 8px;
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+  --shadow: 0 1px 8px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 24px rgba(0, 0, 0, 0.10), 0 8px 48px rgba(0, 0, 0, 0.08);
   --transition: all 0.2s ease;
 }
 
@@ -76,36 +76,39 @@ a:hover {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--color-primary-light), var(--color-accent));
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
   color: white;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
 }
 
 .btn-primary:hover {
-  background: linear-gradient(135deg, #3a6fa0, var(--color-accent-light));
+  background: linear-gradient(135deg, #1d4ed8, #2563eb);
   transform: translateY(-2px);
-  box-shadow: var(--shadow);
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.35);
 }
 
 .btn-secondary {
-  background: var(--color-bg-elevated);
+  background: #ffffff;
   color: var(--color-text);
   border: 1px solid var(--color-border);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
 .btn-secondary:hover {
-  background: var(--color-border);
+  background: var(--color-bg-elevated);
+  border-color: #cbd5e1;
   transform: translateY(-2px);
 }
 
 .btn-accent {
-  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-light));
-  color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-light));
+  color: white;
   font-weight: 700;
 }
 
 .btn-accent:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(232, 160, 32, 0.4);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
 }
 
 .btn-danger {
@@ -125,8 +128,8 @@ a:hover {
 
 /* Form Elements */
 .select {
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  border: 1.5px solid var(--color-border);
   color: var(--color-text);
   padding: 10px 14px;
   border-radius: var(--radius-sm);
@@ -135,11 +138,12 @@ a:hover {
   cursor: pointer;
   transition: var(--transition);
   appearance: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238a9bb0' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2364748b' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-repeat: no-repeat;
   background-position: right 8px center;
   background-size: 16px;
   padding-right: 32px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
 .select:focus {
@@ -195,16 +199,16 @@ a:hover {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg);
+  background: var(--color-bg-elevated);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: #cbd5e1;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-text-muted);
+  background: #94a3b8;
 }
 
 /* Animations */
