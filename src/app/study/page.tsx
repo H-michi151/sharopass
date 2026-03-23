@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ALL_STUDY_SUBJECTS, generateSubjectStudy } from '../../lib/sampleData';
+import { ALL_STUDY_SUBJECTS, generateSubjectStudy, SENTAKU_POOLS, TAKUITSU_POOLS } from '../../lib/sampleData';
 import { Question } from '../../types';
 
 type Phase = 'select' | 'studying' | 'review';
@@ -48,9 +48,21 @@ export default function StudyPage() {
   const takuitsuSubjects = ALL_STUDY_SUBJECTS.filter(s => TAKUITSU_IDS.includes(s.id));
   const sentakuSubjects = ALL_STUDY_SUBJECTS.filter(s => !TAKUITSU_IDS.includes(s.id));
 
+  // 科目のプールサイズを取得
+  const getPoolSize = (id: string): number => {
+    const isTakuitsuId = TAKUITSU_IDS.includes(id);
+    const pool = isTakuitsuId
+      ? (TAKUITSU_POOLS as Record<string, unknown[]>)[id]
+      : (SENTAKU_POOLS as Record<string, unknown[]>)[id];
+    return pool?.length || 1;
+  };
+
   const handleStart = () => {
     if (!selectedSubjectId) return;
-    const { questions: qs } = generateSubjectStudy(selectedSubjectId, questionCount);
+    const maxPool = getPoolSize(selectedSubjectId);
+    const actualCount = Math.min(questionCount, maxPool);
+    const { questions: qs } = generateSubjectStudy(selectedSubjectId, actualCount);
+    if (qs.length === 0) return;
     setQuestions(qs);
     setCurrentIdx(0);
     setUserAnswers(new Array(qs.length).fill(null));
@@ -105,27 +117,30 @@ export default function StudyPage() {
             択一式（5択問題）
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
-            {takuitsuSubjects.map(s => (
-              <button
-                key={s.id}
-                onClick={() => setSelectedSubjectId(s.id)}
-                className="card"
-                style={{
-                  cursor: 'pointer',
-                  border: `2px solid ${selectedSubjectId === s.id ? 'var(--color-accent)' : 'var(--color-border)'}`,
-                  background: selectedSubjectId === s.id ? 'rgba(232,160,32,0.1)' : 'var(--color-bg-elevated)',
-                  padding: '16px',
-                  textAlign: 'left',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>択一式</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 600, color: selectedSubjectId === s.id ? 'var(--color-accent)' : 'var(--color-text)', lineHeight: 1.4 }}>
-                  {s.name}
-                </div>
-                <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '6px' }}>プール: 10問</div>
-              </button>
-            ))}
+            {takuitsuSubjects.map(s => {
+              const poolSize = getPoolSize(s.id);
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => { setSelectedSubjectId(s.id); setQuestionCount(Math.min(5, poolSize)); }}
+                  className="card"
+                  style={{
+                    cursor: 'pointer',
+                    border: `2px solid ${selectedSubjectId === s.id ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                    background: selectedSubjectId === s.id ? 'rgba(232,160,32,0.1)' : 'var(--color-bg-elevated)',
+                    padding: '16px',
+                    textAlign: 'left',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>択一式</div>
+                  <div style={{ fontSize: '0.88rem', fontWeight: 600, color: selectedSubjectId === s.id ? 'var(--color-accent)' : 'var(--color-text)', lineHeight: 1.4 }}>
+                    {s.name}
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '6px' }}>プール: {poolSize}問</div>
+                </button>
+              );
+            })}
           </div>
         </section>
 
@@ -135,27 +150,30 @@ export default function StudyPage() {
             選択式（空欄補充問題）
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '12px' }}>
-            {sentakuSubjects.map(s => (
-              <button
-                key={s.id}
-                onClick={() => setSelectedSubjectId(s.id)}
-                className="card"
-                style={{
-                  cursor: 'pointer',
-                  border: `2px solid ${selectedSubjectId === s.id ? 'var(--color-accent)' : 'var(--color-border)'}`,
-                  background: selectedSubjectId === s.id ? 'rgba(232,160,32,0.1)' : 'var(--color-bg-elevated)',
-                  padding: '16px',
-                  textAlign: 'left',
-                  transition: 'all 0.15s ease',
-                }}
-              >
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>選択式</div>
-                <div style={{ fontSize: '0.88rem', fontWeight: 600, color: selectedSubjectId === s.id ? 'var(--color-accent)' : 'var(--color-text)', lineHeight: 1.4 }}>
-                  {s.name}
-                </div>
-                <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '6px' }}>プール: 3問</div>
-              </button>
-            ))}
+            {sentakuSubjects.map(s => {
+              const poolSize = getPoolSize(s.id);
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => { setSelectedSubjectId(s.id); setQuestionCount(Math.min(3, poolSize)); }}
+                  className="card"
+                  style={{
+                    cursor: 'pointer',
+                    border: `2px solid ${selectedSubjectId === s.id ? 'var(--color-accent)' : 'var(--color-border)'}`,
+                    background: selectedSubjectId === s.id ? 'rgba(232,160,32,0.1)' : 'var(--color-bg-elevated)',
+                    padding: '16px',
+                    textAlign: 'left',
+                    transition: 'all 0.15s ease',
+                  }}
+                >
+                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '4px' }}>選択式</div>
+                  <div style={{ fontSize: '0.88rem', fontWeight: 600, color: selectedSubjectId === s.id ? 'var(--color-accent)' : 'var(--color-text)', lineHeight: 1.4 }}>
+                    {s.name}
+                  </div>
+                  <div style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: '6px' }}>プール: {poolSize}問</div>
+                </button>
+              );
+            })}
           </div>
         </section>
 
@@ -166,10 +184,10 @@ export default function StudyPage() {
               ✅ {ALL_STUDY_SUBJECTS.find(s => s.id === selectedSubjectId)?.name}
             </div>
             <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', display: 'block', marginBottom: '10px' }}>
-              出題数：
+              出題数（最大{getPoolSize(selectedSubjectId)}問）：
             </label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-              {[3, 5, 7, 10].map(n => (
+              {[3, 5, 7, 10].filter(n => n <= getPoolSize(selectedSubjectId)).map(n => (
                 <button key={n} onClick={() => setQuestionCount(n)} className="btn" style={{
                   padding: '8px 18px',
                   background: questionCount === n ? 'rgba(232,160,32,0.2)' : 'var(--color-bg-elevated)',

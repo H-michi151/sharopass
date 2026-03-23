@@ -1,0 +1,73 @@
+name: Build & Deploy to Sakura
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # 1. ソースコードを取得
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Node.js セットアップ（npm キャッシュ有効）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # 3. 依存パッケージインストール
+      - name: Install dependencies
+        run: npm ci
+
+      # 4. 環境変数ファイル生成（GitHub Secretsから）
+      - name: Create .env.local
+        run: |
+          echo "NEXT_PUBLIC_SAKURA_API_URL=${{ secrets.NEXT_PUBLIC_SAKURA_API_URL }}" > .env.local
+
+      # 5. Next.js 静的ビルド（out/ フォルダが生成される）
+      - name: Build Next.js
+        run: npm run build
+
+      # 6. out/ → さくらサーバー /www/sharopass/ へ FTP 転送
+      - name: Deploy to Sakura via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: mdl-japan.sakura.ne.jp
+          username: mdl-japan
+          password: ${{ secrets.SAKURA_FTP_PASSWORD }}
+          local-dir: ./out/
+          server-dir: /www/sharopass/
+          protocol: ftp
+          port: 21
+          # 削除しない（PHPファイル等を保護するため）
+          dangerous-clean-slate: false
+          # 変更ファイルのみ転送（高速化）
+          state-name: .ftp-deploy-sync-state.json
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .ftp-deploy-sync-state.json
+
+      # 7. sakura-api/ → /www/sharopass/sakura-api/ へ FTP 転送
+      - name: Deploy PHP API to Sakura
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: mdl-japan.sakura.ne.jp
+          username: mdl-japan
+          password: ${{ secrets.SAKURA_FTP_PASSWORD }}
+          local-dir: ./sakura-api/
+          server-dir: /www/sharopass/sakura-api/
+          protocol: ftp
+          port: 21
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
