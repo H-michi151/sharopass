@@ -35,39 +35,66 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      # 6. out/ → さくらサーバー /www/sharopass/ へ FTP 転送
-      - name: Deploy to Sakura via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: mdl-japan.sakura.ne.jp
-          username: mdl-japan
-          password: ${{ secrets.SAKURA_FTP_PASSWORD }}
-          local-dir: ./out/
-          server-dir: /www/sharopass/
-          protocol: ftps
-          port: 21
-          # 削除しない（PHPファイル等を保護するため）
-          dangerous-clean-slate: false
-          # 変更ファイルのみ転送（高速化）
-          state-name: .ftp-deploy-sync-state.json
-          exclude: |
-            **/.git*
-            **/.git*/**
-            **/node_modules/**
-            .ftp-deploy-sync-state.json
+      # 6. Python ftplib で out/ をさくらサーバーへ転送
+      - name: Deploy to Sakura via FTP (Python)
+        env:
+          FTP_HOST: mdl-japan.sakura.ne.jp
+          FTP_USER: mdl-japan
+          FTP_PASS: ${{ secrets.SAKURA_FTP_PASSWORD }}
+        run: |
+          python3 << 'PYEOF'
+          import ftplib
+          import os
+          import sys
 
-      # 7. sakura-api/ → /www/sharopass/sakura-api/ へ FTP 転送
-      - name: Deploy PHP API to Sakura
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: mdl-japan.sakura.ne.jp
-          username: mdl-japan
-          password: ${{ secrets.SAKURA_FTP_PASSWORD }}
-          local-dir: ./sakura-api/
-          server-dir: /www/sharopass/sakura-api/
-          protocol: ftps
-          port: 21
-          dangerous-clean-slate: false
-          exclude: |
-            **/.git*
-            **/.git*/**
+          HOST = os.environ['FTP_HOST']
+          USER = os.environ['FTP_USER']
+          PASS = os.environ['FTP_PASS']
+          LOCAL_DIR = 'out'
+          REMOTE_BASE = '/www/sharopass'
+
+          def ensure_dir(ftp, path):
+              parts = [p for p in path.split('/') if p]
+              cur = ''
+              for p in parts:
+                  cur += '/' + p
+                  try:
+                      ftp.mkd(cur)
+                  except:
+                      pass
+
+          def upload_dir(ftp, local_dir, remote_dir):
+              ensure_dir(ftp, remote_dir)
+              for item in os.listdir(local_dir):
+                  local_path = os.path.join(local_dir, item)
+                  remote_path = remote_dir + '/' + item
+                  if os.path.isdir(local_path):
+                      upload_dir(ftp, local_path, remote_path)
+                  else:
+                      try:
+                          with open(local_path, 'rb') as f:
+                              ftp.storbinary(f'STOR {remote_path}', f)
+                          print(f'  ✓ {remote_path}')
+                      except Exception as e:
+                          print(f'  ✗ {remote_path}: {e}')
+
+          print(f'Connecting to {HOST}...')
+          ftp = ftplib.FTP()
+          ftp.connect(HOST, 21, timeout=60)
+          ftp.login(USER, PASS)
+          ftp.set_pasv(True)
+          print('Connected.')
+
+          print(f'Uploading {LOCAL_DIR}/ → {REMOTE_BASE}/')
+          upload_dir(ftp, LOCAL_DIR, REMOTE_BASE)
+
+          # sakura-api/ も転送
+          api_local = 'sakura-api'
+          api_remote = '/www/sharopass/sakura-api'
+          if os.path.exists(api_local):
+              print(f'Uploading {api_local}/ → {api_remote}/')
+              upload_dir(ftp, api_local, api_remote)
+
+          ftp.quit()
+          print('✅ Deploy complete!')
+          PYEOF
