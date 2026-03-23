@@ -44,7 +44,7 @@ jobs:
           password: ${{ secrets.SAKURA_FTP_PASSWORD }}
           local-dir: ./out/
           server-dir: /www/sharopass/
-          protocol: ftp
+          protocol: ftps
           port: 21
           # 削除しない（PHPファイル等を保護するため）
           dangerous-clean-slate: false
@@ -65,7 +65,7 @@ jobs:
           password: ${{ secrets.SAKURA_FTP_PASSWORD }}
           local-dir: ./sakura-api/
           server-dir: /www/sharopass/sakura-api/
-          protocol: ftp
+          protocol: ftps
           port: 21
           dangerous-clean-slate: false
           exclude: |
