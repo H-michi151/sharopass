@@ -35,7 +35,7 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      # 6. Python ftplib で out/ をさくらサーバーへ転送
+      # 6. Python ftplib.FTP_TLS で out/ をさくらサーバーへ転送
       - name: Deploy to Sakura via FTP (Python)
         env:
           FTP_HOST: mdl-japan.sakura.ne.jp
@@ -45,7 +45,7 @@ jobs:
           python3 << 'PYEOF'
           import ftplib
           import os
-          import sys
+          import ssl
 
           HOST = os.environ['FTP_HOST']
           USER = os.environ['FTP_USER']
@@ -78,17 +78,30 @@ jobs:
                       except Exception as e:
                           print(f'  ✗ {remote_path}: {e}')
 
-          print(f'Connecting to {HOST}...')
-          ftp = ftplib.FTP()
-          ftp.connect(HOST, 21, timeout=60)
-          ftp.login(USER, PASS)
-          ftp.set_pasv(True)
-          print('Connected.')
+          # まずFTPS(TLS)で試行、失敗したら通常FTPにフォールバック
+          ftp = None
+          try:
+              print(f'Connecting via FTPS to {HOST}...')
+              ctx = ssl.create_default_context()
+              ctx.check_hostname = False
+              ctx.verify_mode = ssl.CERT_NONE
+              ftp = ftplib.FTP_TLS(context=ctx)
+              ftp.connect(HOST, 21, timeout=60)
+              ftp.login(USER, PASS)
+              ftp.prot_p()
+              ftp.set_pasv(True)
+              print('Connected via FTPS.')
+          except Exception as e:
+              print(f'FTPS failed ({e}), trying plain FTP...')
+              ftp = ftplib.FTP()
+              ftp.connect(HOST, 21, timeout=60)
+              ftp.login(USER, PASS)
+              ftp.set_pasv(True)
+              print('Connected via FTP.')
 
           print(f'Uploading {LOCAL_DIR}/ → {REMOTE_BASE}/')
           upload_dir(ftp, LOCAL_DIR, REMOTE_BASE)
 
-          # sakura-api/ も転送
           api_local = 'sakura-api'
           api_remote = '/www/sharopass/sakura-api'
           if os.path.exists(api_local):
