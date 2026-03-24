@@ -35,22 +35,28 @@ jobs:
       - name: Build Next.js
         run: npm run build
 
-      # 6. lftp で SFTP/FTP 経由でさくらサーバーへ転送
-      - name: Install lftp
-        run: sudo apt-get install -y lftp
-
-      - name: Deploy to Sakura via lftp
-        env:
-          FTP_HOST: mdl-japan.sakura.ne.jp
-          FTP_USER: mdl-japan
-          FTP_PASS: ${{ secrets.SAKURA_FTP_PASSWORD }}
+      # 6. SSH秘密鍵を設定
+      - name: Setup SSH key
         run: |
-          lftp -c "
-            set ftp:ssl-allow no;
-            set net:max-retries 3;
-            set net:reconnect-interval-base 5;
-            open ftp://$FTP_USER:$FTP_PASS@$FTP_HOST;
-            mirror --reverse --delete --verbose out/ /www/sharopass/;
-            mirror --reverse --delete --verbose sakura-api/ /www/sharopass/sakura-api/;
-            bye
-          "
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SAKURA_SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H mdl-japan.sakura.ne.jp >> ~/.ssh/known_hosts 2>/dev/null
+
+      # 7. rsync over SSH でさくらサーバーへ転送
+      - name: Deploy to Sakura via rsync
+        run: |
+          rsync -avz --delete \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -p 22" \
+            out/ \
+            mdl-japan@mdl-japan.sakura.ne.jp:/home/mdl-japan/www/sharopass/
+
+          # sakura-api も転送
+          if [ -d sakura-api ]; then
+            rsync -avz --delete \
+              -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -p 22" \
+              sakura-api/ \
+              mdl-japan@mdl-japan.sakura.ne.jp:/home/mdl-japan/www/sharopass/sakura-api/
+          fi
+
+          echo "✅ Deploy complete!"
