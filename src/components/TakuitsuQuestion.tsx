@@ -22,14 +22,27 @@ export default function TakuitsuQuestion({ question }: TakuitsuQuestionProps) {
   return (
     <div className="fade-in">
       <div style={{ marginBottom: '24px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '16px' }}>
           <span className="badge badge-accent">問 {question.globalNumber}</span>
           <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>{question.subjectName}</span>
           {isCompleted && (
             <span className="badge badge-success" style={{ marginLeft: 'auto' }}>解答確認モード</span>
           )}
         </div>
-        <h2 style={{ fontSize: '1.25rem', fontWeight: 600, lineHeight: 1.6 }}>{question.text}</h2>
+        <div style={{ 
+          fontSize: '1.15rem', 
+          fontWeight: 600, 
+          lineHeight: 1.8,
+          whiteSpace: 'pre-wrap',
+          background: 'var(--color-bg-elevated)',
+          padding: '24px',
+          borderRadius: 'var(--radius)',
+          border: '1px solid var(--color-border)',
+          color: 'var(--color-text)',
+          boxShadow: 'inset 0 1px 3px rgba(0,0,0,0.05)'
+        }}>
+          {question.text}
+        </div>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -45,7 +58,7 @@ export default function TakuitsuQuestion({ question }: TakuitsuQuestionProps) {
               onClick={() => handleSelect(choice, index)}
               style={{
                 display: 'flex',
-                alignItems: 'center',
+                alignItems: 'flex-start',
                 gap: '16px',
                 padding: '16px 20px',
                 borderRadius: 'var(--radius-sm)',
@@ -80,6 +93,7 @@ export default function TakuitsuQuestion({ question }: TakuitsuQuestionProps) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 flexShrink: 0,
+                marginTop: '2px',
                 fontSize: '0.85rem',
                 fontWeight: 700,
                 background: isCorrect 
@@ -91,16 +105,18 @@ export default function TakuitsuQuestion({ question }: TakuitsuQuestionProps) {
               }}>
                 {choiceNum}
               </div>
-              <div style={{ flex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-start' }}>
                 <span style={{ 
                   fontSize: '1rem', 
                   fontWeight: (isSelected || isCorrect) ? 600 : 400,
-                  color: (isSelected || isCorrect) ? 'var(--color-text)' : 'var(--color-text-muted)'
+                  color: (isSelected || isCorrect) ? 'var(--color-text)' : 'var(--color-text-muted)',
+                  textAlign: 'left',
+                  lineHeight: '1.5'
                 }}>
                   {choice}
                 </span>
                 {isCompleted && (
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div style={{ display: 'flex', gap: '8px', alignSelf: 'flex-end' }}>
                     {isSelected && (
                       <span style={{ 
                         fontSize: '0.75rem', 

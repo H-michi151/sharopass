@@ -156,20 +156,11 @@ export default function ExamPage() {
         )}
       </header>
 
-      {/* Content */}
-      <div style={{ 
-        maxWidth: '1200px', 
-        margin: '0 auto', 
-        width: '100%', 
-        padding: '32px 24px',
-        display: 'grid',
-        gridTemplateColumns: '1fr 300px',
-        gap: '40px',
-        flex: 1
-      }}>
+      <div className="exam-layout">
+
         {/* Main Area */}
         <main>
-          <div className="card" style={{ minHeight: '600px', display: 'flex', flexDirection: 'column' }}>
+          <div className="card" style={{ display: 'flex', flexDirection: 'column' }}>
             <div style={{ flex: 1 }}>
               {currentQuestion && (
                 type === 'takuitsu' 
@@ -177,43 +168,36 @@ export default function ExamPage() {
                 : <SentakuQuestion question={currentQuestion} />
               )}
             </div>
+          </div>
 
-            {/* Pagination */}
-            <div style={{ 
-              marginTop: '40px', 
-              paddingTop: '24px', 
-              borderTop: '1px solid var(--color-border)',
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center'
-            }}>
-              <button 
-                className="btn btn-secondary"
-                disabled={currentIndex === 0}
-                onClick={prevQuestion}
-                style={{ minWidth: '120px' }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
-                前の問題
-              </button>
-              <span style={{ fontSize: '1rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
-                {currentIndex + 1} / {questions.length}
-              </span>
-              <button 
-                className="btn btn-primary"
-                disabled={currentIndex === questions.length - 1}
-                onClick={nextQuestion}
-                style={{ minWidth: '120px' }}
-              >
-                次の問題
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
-              </button>
-            </div>
+          {/* Mobile/PC Navigation */}
+          <div className="exam-mobile-nav">
+            <button 
+              className="btn btn-secondary"
+              disabled={currentIndex === 0}
+              onClick={prevQuestion}
+              style={{ flex: 1 }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M15 18l-6-6 6-6"/></svg>
+              前の問題
+            </button>
+            <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', fontWeight: 600, whiteSpace: 'nowrap' }}>
+              {currentIndex + 1} / {questions.length}
+            </span>
+            <button 
+              className="btn btn-primary"
+              disabled={currentIndex === questions.length - 1}
+              onClick={nextQuestion}
+              style={{ flex: 1 }}
+            >
+              次の問題
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
           </div>
         </main>
 
         {/* Sidebar */}
-        <aside>
+        <aside className="exam-sidebar">
           <div style={{ position: 'sticky', top: '92px' }}>
             <QuestionNav onSubmit={isReviewMode ? undefined : handleSubmit} />
             {!isReviewMode && (

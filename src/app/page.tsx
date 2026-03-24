@@ -39,17 +39,9 @@ export default function Dashboard() {
   const takuitsuLabel = TIME_OPTIONS_TAKUITSU.find(o => o.value === customTimeLimitTakuitsu)?.label || `${customTimeLimitTakuitsu}分`;
 
   return (
-    <main style={{ maxWidth: '1000px', margin: '0 auto', padding: '60px 24px' }}>
+    <main className="main-container">
       <header style={{ textAlign: 'center', marginBottom: '60px' }}>
-        <h1 style={{
-          fontSize: '3rem',
-          fontWeight: 800,
-          marginBottom: '16px',
-          background: 'linear-gradient(to right, #fff, var(--color-accent))',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          lineHeight: 1.2
-        }}>
+        <h1 className="main-title">
           SHAROSHI MOCK EXAM
         </h1>
         <p style={{ fontSize: '1.2rem', color: 'var(--color-text-muted)' }}>
@@ -58,12 +50,7 @@ export default function Dashboard() {
       </header>
 
       {/* タイマー設定バー */}
-      <div style={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        gap: '12px',
-        marginBottom: '24px'
-      }}>
+      <div className="timer-bar">
         <button
           className="btn"
           style={{ fontSize: '0.85rem', gap: '6px', background: 'rgba(46,204,113,0.12)', border: '1px solid rgba(46,204,113,0.35)', color: 'var(--color-success)' }}
@@ -101,7 +88,7 @@ export default function Dashboard() {
           <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '20px', color: 'var(--color-accent)' }}>
             ⏱ 試験時間の設定
           </h3>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' }}>
+          <div className="settings-grid">
             <div>
               <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '8px', display: 'block' }}>
                 選択式（午前）
@@ -152,7 +139,7 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginBottom: '80px' }}>
+      <div className="cards-grid">
         {/* 選択式カード */}
         <div className="card fade-in" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', animationDelay: '0.1s' }}>
           <div>
@@ -210,7 +197,7 @@ export default function Dashboard() {
 
       <section className="fade-in" style={{ animationDelay: '0.3s' }}>
         <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '24px', color: 'var(--color-text-muted)' }}>学習のヒント</h3>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+        <div className="hints-grid">
           <div style={{ display: 'flex', gap: '16px' }}>
             <div style={{ color: 'var(--color-accent)', flexShrink: 0 }}>
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>

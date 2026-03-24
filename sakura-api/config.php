@@ -5,11 +5,11 @@
  * このファイルはさくらサーバーのpublic_html外に置くことを推奨
  */
 
-define('DB_HOST', 'mysqlXXX.db.sakura.ne.jp'); // さくらのDBホスト名（要変更）
-define('DB_NAME', 'your_database_name');          // データベース名（要変更）
-define('DB_USER', 'your_username');               // ユーザー名（要変更）
-define('DB_PASS', 'your_password');               // パスワード（要変更）
-define('JWT_SECRET', 'your_very_long_random_secret_key_here'); // JWTシークレット（任意の長い文字列に変更）
+define('DB_HOST', 'mysql3110.db.sakura.ne.jp');
+define('DB_NAME', 'mdl-japan_sharopass');
+define('DB_USER', 'mdl-japan_sharopass');
+define('DB_PASS', 'MDLsharoshiH151');
+define('JWT_SECRET', 'sharopass_jwt_secret_MDL2024_H151'); // JWTシークレット
 define('ALLOWED_ORIGIN', 'https://sharopass.jp'); // フロントエンドURL
 
 function getDB(): PDO {

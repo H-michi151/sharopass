@@ -7,6 +7,12 @@ export interface Blank {
   choices: string[];
 }
 
+export interface SentakuData {
+  blanks: string[];
+  choices: string[];
+  answers: Record<string, string>;
+}
+
 export interface Question {
   id: string;
   examId: string;
@@ -20,7 +26,8 @@ export interface Question {
   choices?: string[];
   correctAnswer?: string;
   // 選択式
-  blanks?: Blank[];
+  blanks?: Blank[]; // (仕様変更により非推奨、sentakuDataを使用)
+  sentakuData?: SentakuData;
   explanation?: string;
   tags: string[];
   difficulty: number;
