@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Question } from '../types';
 import { useExamStore } from '../stores/examStore';
 
@@ -15,6 +15,11 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
   const session = useExamStore((s) => s.session);
   const answerQuestion = useExamStore((s) => s.answerQuestion);
   const [activeBlankIndex, setActiveBlankIndex] = useState<number>(0);
+
+  // 問題が切り替わったら「ア」（index 0）からスタート
+  useEffect(() => {
+    setActiveBlankIndex(0);
+  }, [question.id]);
 
   const currentAnswers = (session?.answers[question.id]?.answer as Record<string, string>) || {};
   const isCompleted = session?.status !== 'in_progress';
