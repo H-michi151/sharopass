@@ -78,6 +78,13 @@ export default function Dashboard() {
           学習分析
         </button>
         <button
+          className="btn"
+          style={{ fontSize: '0.85rem', gap: '6px', background: 'rgba(155,89,182,0.15)', border: '1px solid rgba(155,89,182,0.4)', color: '#9b59b6' }}
+          onClick={() => router.push('/practice')}
+        >
+          🧠 練習問題
+        </button>
+        <button
           className="btn btn-secondary"
           style={{ fontSize: '0.85rem', gap: '6px' }}
           onClick={() => setShowSettings(!showSettings)}
