@@ -4,6 +4,7 @@ import { useAuthStore } from '../stores/authStore';
 import { useExamStore } from '../stores/examStore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import AnnouncementList from '../components/AnnouncementList';
 
 const TIME_OPTIONS_SENTAKU = [
   { label: '40分（短縮）', value: 40 },
@@ -26,8 +27,10 @@ export default function Dashboard() {
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
+    // Firebase未設定時はデモモードで動作
     if (!user) loginDemo();
-  }, [user, loginDemo]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleStart = (type: 'sentaku' | 'takuitsu') => {
     router.push(`/exam/${type}`);
@@ -40,7 +43,7 @@ export default function Dashboard() {
 
   return (
     <main className="main-container">
-      <header style={{ textAlign: 'center', marginBottom: '60px' }}>
+      <header style={{ textAlign: 'center', marginBottom: '48px' }}>
         <h1 className="main-title">
           SHAROSHI MOCK EXAM
         </h1>
@@ -48,6 +51,9 @@ export default function Dashboard() {
           社会保険労務士試験 合格への最短ルート
         </p>
       </header>
+
+      {/* お知らせ */}
+      <AnnouncementList />
 
       {/* タイマー設定バー */}
       <div className="timer-bar">

@@ -29,7 +29,7 @@ export default function ResultPage() {
       return;
     }
     if (results && session && questions.length > 0) {
-      addRecord(results, questions, session.answers as any);
+      addRecord(results, questions, session.answers as any, user?.uid);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

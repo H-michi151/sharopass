@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { ExamResult, Question, ExamType } from '../types';
 import { saveRecordToFirestore, loadRecordsFromFirestore, deleteAllRecordsFromFirestore } from '../lib/firestoreHistory';
+import { saveSubjectProgress } from '../lib/firestoreProgress';
 import { isFirebaseConfigured } from '../lib/firebase';
 
 // LocalStorageに保存する1回分の試験記録
@@ -42,7 +43,7 @@ export interface ExamRecord {
 
 interface StudyHistoryState {
   records: ExamRecord[];
-  addRecord: (result: ExamResult, questions: Question[], answers: Record<string, { answer: string | Record<string, string>; answeredAt: string; questionId: string }>) => void;
+  addRecord: (result: ExamResult, questions: Question[], answers: Record<string, { answer: string | Record<string, string>; answeredAt: string; questionId: string }>, userId?: string) => void;
   clearHistory: (userId?: string) => void;
   // Firestore同期
   loadFromFirestore: (userId: string) => Promise<void>;
@@ -62,7 +63,7 @@ export const useStudyHistoryStore = create<StudyHistoryState>()(
     (set, get) => ({
       records: [],
 
-      addRecord: (result, questions, answers) => {
+      addRecord: (result, questions, answers, userId) => {
         // 重複防止：同じresult.idが既に保存されている場合はスキップ
         const existing = get().records.find(r => r.id === result.id);
         if (existing) return;
@@ -150,10 +151,17 @@ export const useStudyHistoryStore = create<StudyHistoryState>()(
 
         set(state => ({ records: [record, ...state.records].slice(0, 50) }));
 
-        // Firestore同期（設定済みの場合のみ）
-        if (isFirebaseConfigured && answers['__userId__'] === undefined) {
-          // userIdは呼び出し元から取得できないのでasync保存はuseEffectで行う
-          // addRecord後にsyncToFirestoreを呼ぶ設計
+        // Firestore に試験記録と科目別進捗を保存（ログイン済みの場合のみ）
+        if (isFirebaseConfigured && userId && userId !== 'demo-user') {
+          saveRecordToFirestore(userId, record).catch((e) =>
+            console.error('試験記録Firestore保存エラー:', e)
+          );
+          // 科目別進捗を保存
+          for (const sr of result.subjectResults) {
+            saveSubjectProgress(userId, sr.subjectId, sr.score, sr.maxScore).catch((e) =>
+              console.error('進捗Firestore保存エラー:', e)
+            );
+          }
         }
       },
 
