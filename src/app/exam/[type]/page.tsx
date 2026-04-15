@@ -16,7 +16,7 @@ export default function ExamPage() {
   const type = params.type as ExamType;
   const router = useRouter();
   
-  const { user } = useAuthStore();
+  const { user, isLoading: authLoading } = useAuthStore();
   const { 
     questions, 
     session, 
@@ -36,7 +36,14 @@ export default function ExamPage() {
   const [isInitializing, setIsInitializing] = useState(true);
 
   useEffect(() => {
-    if (!user) return;
+    // 認証ロード中は待機
+    if (authLoading) return;
+
+    // 未ログインならログインページへ
+    if (!user) {
+      router.push('/login');
+      return;
+    }
 
     // 復習モードの場合: セッションが完了済みでも、そのまま問題表示（リダイレクトしない）
     if (isReviewMode && session && session.type === type && session.status === 'completed') {
@@ -56,7 +63,7 @@ export default function ExamPage() {
     setQuestions(qList);
     startSession(exam.id, user.uid, type, customLimit, exam.subjects);
     setIsInitializing(false);
-  }, [type, user]);
+  }, [type, user, authLoading]);
 
   useEffect(() => {
     // 試験が完了したとき、復習モードでなければ結果ページへ遷移
@@ -74,7 +81,7 @@ export default function ExamPage() {
     router.push('/');
   };
 
-  if (isInitializing || !session) {
+  if (authLoading || isInitializing || !session) {
     return (
       <div style={{ 
         display: 'flex', 
