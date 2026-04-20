@@ -68,7 +68,7 @@ export default function ExamPage() {
   useEffect(() => {
     // 試験が完了したとき、復習モードでなければ結果ページへ遷移
     if (results && session?.status === 'completed' && !isInitializing && !isReviewMode) {
-      router.push(`/result/${results.id}`);
+      router.push('/result/current');
     }
   }, [results, session?.status, router, isInitializing, isReviewMode]);
 

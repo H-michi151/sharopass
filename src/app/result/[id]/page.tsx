@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useExamStore } from '../../../stores/examStore';
 import { useAuthStore } from '../../../stores/authStore';
 import { useStudyHistoryStore } from '../../../stores/studyHistoryStore';
