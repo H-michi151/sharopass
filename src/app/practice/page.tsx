@@ -122,8 +122,10 @@ export default function PracticePage() {
   const canAnswer = () => {
     if (!question) return false;
     if (question.type === '択一式' || question.type === '○×') return selectedChoice !== null;
-    if (question.type === '選択式' && question.answers) {
-      return Object.keys(question.answers).every(k => fillAnswers[k]);
+    if (question.type === '選択式' && question.answers && question.word_bank) {
+      return Object.keys(question.answers).every(
+        k => typeof fillAnswers[k] === 'string' && fillAnswers[k] !== ''
+      );
     }
     return false;
   };
