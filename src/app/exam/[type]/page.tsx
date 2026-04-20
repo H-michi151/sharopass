@@ -201,6 +201,19 @@ export default function ExamPage() {
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 18l6-6-6-6"/></svg>
             </button>
           </div>
+          {/* モバイル採点ボタン（サイドバーが非表示の場合のみ表示） */}
+          {!isReviewMode && (
+            <div className="exam-mobile-submit">
+              <button
+                className="btn btn-primary"
+                onClick={handleSubmit}
+                style={{ width: '100%', padding: '13px', fontSize: '1rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                採点して提出
+              </button>
+            </div>
+          )}
         </main>
 
         {/* Sidebar */}

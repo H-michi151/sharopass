@@ -429,6 +429,12 @@ a:hover {
   margin-top: 12px;
 }
 
+/* モバイル採点ボタン: モバイルのみ表示 */
+.exam-mobile-submit {
+  display: block;
+  margin-top: 12px;
+}
+
 @media (min-width: 768px) {
   .exam-layout {
     padding: 32px 24px;
@@ -445,5 +451,10 @@ a:hover {
   /* PCでもナビは表示する */
   .exam-mobile-nav {
     display: flex;
+  }
+
+  /* PCではサイドバーの採点ボタンを使うため非表示 */
+  .exam-mobile-submit {
+    display: none;
   }
 }
