@@ -58,3 +58,30 @@ export async function isPremium(uid: string): Promise<boolean> {
   const plan = await getUserPlan(uid);
   return plan === 'premium';
 }
+
+/**
+ * ユーザー設定を Firestore の users/{uid}/settings/main に保存する。
+ * 既存データに対して merge: true で部分更新。
+ */
+export async function saveUserSettings(
+  uid: string,
+  settings: Record<string, unknown>
+): Promise<void> {
+  if (!db) return;
+  const ref = doc(db, 'users', uid, 'settings', 'main');
+  await setDoc(ref, { ...settings, updatedAt: serverTimestamp() }, { merge: true });
+}
+
+/**
+ * ユーザー設定を Firestore から取得する。
+ * ドキュメントが存在しない場合は null を返す。
+ */
+export async function getUserSettings(
+  uid: string
+): Promise<Record<string, unknown> | null> {
+  if (!db) return null;
+  const ref = doc(db, 'users', uid, 'settings', 'main');
+  const snap = await getDoc(ref);
+  return snap.exists() ? (snap.data() as Record<string, unknown>) : null;
+}
+

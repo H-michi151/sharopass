@@ -7,7 +7,7 @@ import { isFirebaseConfigured } from '../../lib/firebase';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { loginDemo, loginWithGoogle } = useAuthStore();
+  const { loginDemo, loginWithGoogle, setShowAuthModal } = useAuthStore();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -104,11 +104,40 @@ export default function LoginPage() {
             color: 'var(--color-text-muted)',
             textAlign: 'center',
             lineHeight: 1.6,
-            marginBottom: '20px',
+            marginBottom: '16px',
           }}>
             ログインすると学習記録が自動保存されます。<br />
             ログインなしでも問題を解くことができます。
           </p>
+
+          {/* メール/パスワードログイン */}
+          <button
+            onClick={() => setShowAuthModal(true)}
+            disabled={!isFirebaseConfigured}
+            style={{
+              width: '100%',
+              padding: '12px',
+              marginBottom: '16px',
+              background: 'transparent',
+              border: '1px solid var(--color-border)',
+              borderRadius: '10px',
+              color: 'var(--color-text)',
+              cursor: isFirebaseConfigured ? 'pointer' : 'not-allowed',
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '8px',
+              opacity: isFirebaseConfigured ? 1 : 0.5,
+              transition: 'all 0.2s',
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
+            </svg>
+            メールアドレスでログイン / 新規登録
+          </button>
 
           {error && (
             <div style={{

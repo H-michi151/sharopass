@@ -8,15 +8,20 @@ import {
   type Unsubscribe,
 } from 'firebase/auth';
 import { createOrUpdateUserDoc } from '../lib/firebaseUser';
+import { signUpWithEmail as signUpWithEmailFn, signInWithEmail } from '../lib/auth';
 
 interface AuthState {
   user: User | null;
   isLoading: boolean;
   isDemo: boolean;
+  showAuthModal: boolean;
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
+  setShowAuthModal: (show: boolean) => void;
   loginDemo: () => void;
   loginWithGoogle: () => Promise<void>;
+  loginWithEmail: (email: string, password: string) => Promise<void>;
+  signUpWithEmail: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
   subscribeToAuthChanges: () => Unsubscribe | (() => void);
 }
@@ -25,9 +30,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   isLoading: true,
   isDemo: false,
+  showAuthModal: false,
 
   setUser: (user) => set({ user }),
   setLoading: (isLoading) => set({ isLoading }),
+  setShowAuthModal: (showAuthModal) => set({ showAuthModal }),
 
   loginDemo: () =>
     set({
@@ -62,6 +69,44 @@ export const useAuthStore = create<AuthState>((set) => ({
         fbUser.photoURL ?? undefined
       );
       set({ user, isDemo: false, isLoading: false });
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
+    }
+  },
+
+  loginWithEmail: async (email, password) => {
+    if (!isFirebaseConfigured) throw new Error('Firebase が設定されていません');
+    set({ isLoading: true });
+    try {
+      const fbUser = await signInWithEmail(email, password);
+      const user: User = {
+        uid: fbUser.uid,
+        email: fbUser.email ?? '',
+        displayName: fbUser.displayName ?? 'ユーザー',
+        photoURL: fbUser.photoURL ?? undefined,
+      };
+      await createOrUpdateUserDoc(fbUser.uid, fbUser.email ?? '', fbUser.displayName ?? 'ユーザー');
+      set({ user, isDemo: false, isLoading: false, showAuthModal: false });
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
+    }
+  },
+
+  signUpWithEmail: async (email, password, displayName) => {
+    if (!isFirebaseConfigured) throw new Error('Firebase が設定されていません');
+    set({ isLoading: true });
+    try {
+      const fbUser = await signUpWithEmailFn(email, password, displayName);
+      const user: User = {
+        uid: fbUser.uid,
+        email: fbUser.email ?? '',
+        displayName: fbUser.displayName ?? displayName,
+        photoURL: undefined,
+      };
+      await createOrUpdateUserDoc(fbUser.uid, fbUser.email ?? '', displayName);
+      set({ user, isDemo: false, isLoading: false, showAuthModal: false });
     } catch (err) {
       set({ isLoading: false });
       throw err;
