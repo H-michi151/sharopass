@@ -96,7 +96,7 @@ function calculateResults(session: Session, questions: Question[], subjects: Sub
     : (type === 'sentaku' ? 80 * 60 : 210 * 60);
 
   return {
-    id: `result_${Date.now()}`,
+    id: `${Date.now()}`,
     sessionId: session.id,
     examId: session.examId,
     userId: session.userId,
