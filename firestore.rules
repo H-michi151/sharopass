@@ -49,5 +49,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if false;
     }
+
+    // お問い合わせ（誰でも投稿可、読み取りは禁止）
+    match /contacts/{docId} {
+      allow create: if true;
+      allow read, update, delete: if false;
+    }
   }
 }

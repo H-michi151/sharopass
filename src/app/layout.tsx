@@ -3,6 +3,7 @@ import './globals.css';
 import AuthProvider from '../components/AuthProvider';
 import Header from '../components/Header';
 import AuthModal from '../components/AuthModal';
+import Footer from '../components/Footer';
 
 export const metadata: Metadata = {
   title: '社労士試験 模試アプリ | SHAROPASS',
@@ -21,6 +22,7 @@ export default function RootLayout({
           <Header />
           <AuthModal />
           {children}
+          <Footer />
         </AuthProvider>
       </body>
     </html>
