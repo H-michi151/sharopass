@@ -4,7 +4,6 @@ import { useAuthStore } from '../stores/authStore';
 import { useRouter } from 'next/navigation';
 import { isFirebaseConfigured } from '../lib/firebase';
 import Image from 'next/image';
-import Link from 'next/link';
 
 export default function Header() {
   const { user, isDemo, loginWithGoogle, logout, setShowAuthModal } = useAuthStore();
@@ -64,25 +63,6 @@ export default function Header() {
             SHAROPASS
           </span>
         </button>
-
-        {/* ナビ */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '4px', marginLeft: '8px' }}>
-          <Link
-            href="/dashboard"
-            style={{
-              fontSize: '0.8rem',
-              color: 'var(--color-text-muted)',
-              textDecoration: 'none',
-              padding: '5px 10px',
-              borderRadius: '6px',
-              transition: 'all 0.15s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.06)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
-          >
-            📊 ダッシュボード
-          </Link>
-        </nav>
 
         {/* 右側：ユーザー情報 or ログインボタン */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
