@@ -21,13 +21,13 @@ const TIME_OPTIONS_TAKUITSU = [
 ];
 
 export default function Dashboard() {
-  const { user } = useAuthStore();
+  const { user, loginDemo } = useAuthStore();
   const { customTimeLimitSentaku, customTimeLimitTakuitsu, setCustomTimeLimitSentaku, setCustomTimeLimitTakuitsu } = useExamStore();
   const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
-    if (!user) router.push('/login');
+    if (!user) loginDemo();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

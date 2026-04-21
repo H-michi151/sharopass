@@ -74,7 +74,7 @@ export default function LoginPage() {
           {/* Googleログインボタン */}
           <button
             onClick={handleGoogleLogin}
-            disabled={loading}
+            disabled={loading || !isFirebaseConfigured}
             className="btn btn-primary"
             style={{
               width: '100%',
