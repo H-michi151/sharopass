@@ -165,6 +165,21 @@ export default function LoginPage() {
           >
             🎮 ログインせずに試す
           </button>
+
+          {/* 同意文言 */}
+          <p style={{
+            marginTop: '16px',
+            fontSize: '0.75rem',
+            color: 'var(--color-text-muted)',
+            textAlign: 'center',
+            lineHeight: 1.6,
+          }}>
+            登録・ログインすることで、
+            <a href="/privacy" style={{ color: 'var(--color-text-muted)', textDecoration: 'underline' }}>プライバシーポリシー</a>
+            および
+            <a href="/terms" style={{ color: 'var(--color-text-muted)', textDecoration: 'underline' }}>利用規約</a>
+            に同意したものとみなします。
+          </p>
         </div>
       </div>
     </main>
