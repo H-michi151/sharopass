@@ -21,14 +21,13 @@ const TIME_OPTIONS_TAKUITSU = [
 ];
 
 export default function Dashboard() {
-  const { user, loginDemo } = useAuthStore();
+  const { user } = useAuthStore();
   const { customTimeLimitSentaku, customTimeLimitTakuitsu, setCustomTimeLimitSentaku, setCustomTimeLimitTakuitsu } = useExamStore();
   const router = useRouter();
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
-    // Firebase未設定時はデモモードで動作
-    if (!user) loginDemo();
+    if (!user) router.push('/login');
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
