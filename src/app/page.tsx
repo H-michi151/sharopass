@@ -27,6 +27,7 @@ export default function Dashboard() {
   const [showSettings, setShowSettings] = useState(false);
 
   useEffect(() => {
+    // Firebase未設定時はデモモードで動作
     if (!user) loginDemo();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
