@@ -11,29 +11,29 @@ interface BannerData {
   updatedAt: string;
 }
 
-const SESSION_KEY = 'announcement_banner_dismissed';
+const getSessionKey = (updatedAt: string) => `announcement_dismissed_${updatedAt}`;
 
 export default function AnnouncementBanner() {
   const [data, setData] = useState<BannerData | null>(null);
   const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem(SESSION_KEY)) {
-      setDismissed(true);
-      return;
-    }
     if (!isFirebaseConfigured || !db) return;
 
     const unsub = onSnapshot(doc(db, 'announcements', 'latest'), (snap) => {
       if (snap.exists()) {
-        setData(snap.data() as BannerData);
+        const d = snap.data() as BannerData;
+        if (sessionStorage.getItem(getSessionKey(d.updatedAt))) {
+          setDismissed(true);
+        }
+        setData(d);
       }
     });
     return () => unsub();
   }, []);
 
   const handleDismiss = () => {
-    sessionStorage.setItem(SESSION_KEY, '1');
+    if (data) sessionStorage.setItem(getSessionKey(data.updatedAt), '1');
     setDismissed(true);
   };
 
