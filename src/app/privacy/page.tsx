@@ -29,7 +29,7 @@ export default function PrivacyPage() {
         プライバシーポリシー
       </h1>
       <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', marginBottom: '40px' }}>
-        最終更新日：2025年4月20日
+        最終更新日：2026年4月22日
       </p>
 
       <div style={sectionStyle}>

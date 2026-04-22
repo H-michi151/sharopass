@@ -25,7 +25,7 @@ export default function TermsPage() {
         利用規約
       </h1>
       <p style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)', marginBottom: '40px' }}>
-        最終更新日：2025年4月20日
+        最終更新日：2026年4月22日
       </p>
 
       <p style={{ ...pStyle, marginBottom: '32px' }}>
