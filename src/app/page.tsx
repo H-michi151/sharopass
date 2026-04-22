@@ -5,6 +5,7 @@ import { useExamStore } from '../stores/examStore';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import AnnouncementList from '../components/AnnouncementList';
+import AnnouncementBanner from '../components/AnnouncementBanner';
 
 const TIME_OPTIONS_SENTAKU = [
   { label: '40分（短縮）', value: 40 },
@@ -50,6 +51,9 @@ export default function Dashboard() {
           社会保険労務士試験 合格への最短ルート
         </p>
       </header>
+
+      {/* お知らせバナー */}
+      <AnnouncementBanner />
 
       {/* お知らせ */}
       <AnnouncementList />
