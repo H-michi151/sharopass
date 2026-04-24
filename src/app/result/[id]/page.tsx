@@ -38,7 +38,7 @@ export default function ResultPage() {
     if (!results) router.push('/');
   }, [results, router]);
 
-  if (!results || !user) return null;
+  if (!results) return null;
 
   const handleReturn = () => {
     resetExam();

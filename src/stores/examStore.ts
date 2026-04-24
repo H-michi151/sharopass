@@ -88,12 +88,10 @@ function calculateResults(session: Session, questions: Question[], subjects: Sub
   }
 
   const isPassingAllSubjects = subjectResults.length > 0 && subjectResults.every(r => r.isPassing);
-  const passingTotal = type === 'sentaku' ? 24 : 45;
+  const passingTotal = type === 'sentaku' ? 26 : 44;
   const isPassingTotal = totalScore >= passingTotal;
   const completedAt = new Date().toISOString();
-  const timeTaken = session.remainingTime > 0
-    ? (type === 'sentaku' ? 80 * 60 : 210 * 60) - session.remainingTime
-    : (type === 'sentaku' ? 80 * 60 : 210 * 60);
+  const timeTaken = Math.round((new Date(completedAt).getTime() - new Date(session.startedAt).getTime()) / 1000);
 
   return {
     id: `${Date.now()}`,
