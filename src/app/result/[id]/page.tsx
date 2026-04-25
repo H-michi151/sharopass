@@ -18,18 +18,30 @@ function getGrade(percentage: number): { grade: string; label: string; color: st
 }
 
 export default function ResultPage() {
-  const { results, resetExam, setReviewMode, questions, session } = useExamStore();
+  const { results, resetExam, setReviewMode, questions, session, setResults } = useExamStore();
   const { user } = useAuthStore();
   const { addRecord } = useStudyHistoryStore();
   const router = useRouter();
 
   useEffect(() => {
+    // resultsがメモリにない場合はsessionStorageから復元
     if (!results) {
-      router.push('/');
-      return;
+      const saved = sessionStorage.getItem('examResults');
+      if (saved) {
+        try {
+          setResults(JSON.parse(saved));
+        } catch {
+          router.push('/');
+        }
+        return;
+      } else {
+        router.push('/');
+        return;
+      }
     }
     if (results && session && questions.length > 0) {
       addRecord(results, questions, session.answers as any, user?.uid);
+      sessionStorage.removeItem('examResults');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

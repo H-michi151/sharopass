@@ -17,6 +17,7 @@ interface ExamState {
   prevQuestion: () => void;
   goToQuestion: (index: number) => void;
   submitExam: () => void;
+  setResults: (results: ExamResult) => void;
   resetExam: () => void;
   decrementTimer: () => void;
   setReviewMode: (mode: boolean) => void;
@@ -175,11 +176,14 @@ export const useExamStore = create<ExamState>((set, get) => ({
     const { session, questions, currentSubjects } = get();
     if (!session) return;
     const results = calculateResults(session, questions, currentSubjects);
+    sessionStorage.setItem('examResults', JSON.stringify(results));
     set({
       session: { ...session, status: 'completed', completedAt: new Date().toISOString() },
       results,
     });
   },
+
+  setResults: (results: ExamResult) => set({ results }),
 
   resetExam: () => set({ questions: [], session: null, currentIndex: 0, results: null, isReviewMode: false }),
 
