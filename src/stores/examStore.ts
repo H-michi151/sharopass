@@ -59,7 +59,18 @@ function calculateResults(session: Session, questions: Question[], subjects: Sub
         if (userAnswer && userAnswer.answer === q.correctAnswer) score++;
       } else {
         // 選択式：空欄1つにつき1点
-        if (q.blanks) {
+        if (q.sentakuData) {
+          // 新仕様: キーは "ア","イ","ウ"...
+          const blankLabels = q.sentakuData.blanks;
+          maxScore += blankLabels.length;
+          if (userAnswer && typeof userAnswer.answer === 'object') {
+            const blankAnswers = userAnswer.answer as Record<string, string>;
+            blankLabels.forEach((label: string) => {
+              if (blankAnswers[label] === q.sentakuData!.answers[label]) score++;
+            });
+          }
+        } else if (q.blanks) {
+          // fallback: 古い仕様 キーは "blank_0","blank_1"...
           maxScore += q.blanks.length;
           if (userAnswer && typeof userAnswer.answer === 'object') {
             const blankAnswers = userAnswer.answer as Record<string, string>;
