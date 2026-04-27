@@ -216,7 +216,8 @@ function generateSentakuQuestion(
   const additionalUnique = template.additionalChoices.filter(c => !correctSet.has(c));
   const additionalUniqueDeduplicated = Array.from(new Set(additionalUnique));
   // 正確に20個の選択肢: correctAnswers(5) + additionalChoices(15)
-  const allChoices20 = [...template.correctAnswers, ...additionalUniqueDeduplicated].slice(0, 20);
+  const uniqueCorrectAnswersForChoices = Array.from(new Set(template.correctAnswers));
+  const allChoices20 = [...uniqueCorrectAnswersForChoices, ...additionalUniqueDeduplicated].slice(0, 20);
   if (allChoices20.length < 20) {
     console.warn(`[sampleData] 選択肢が20個未満です(${allChoices20.length}個): ${template.text.slice(0, 40)}`);
   }

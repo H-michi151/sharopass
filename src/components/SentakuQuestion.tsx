@@ -31,7 +31,14 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
 
   const handleSelect = (blankId: string, value: string) => {
     if (isCompleted) return;
-    const newAnswers = { ...currentAnswers, [blankId]: value };
+    const newAnswers = { ...currentAnswers };
+    // 他の空欄で同じ値が使われていたら解除
+    Object.keys(newAnswers).forEach(key => {
+      if (key !== blankId && newAnswers[key] === value) {
+        delete newAnswers[key];
+      }
+    });
+    newAnswers[blankId] = value;
     answerQuestion(question.id, newAnswers);
   };
 
@@ -45,7 +52,6 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
   const handleChoiceClick = (choice: string) => {
     if (isCompleted) return;
     const currentActiveBlankId = blanks[activeBlankIndex];
-    if (usedChoices.has(choice) && currentAnswers[currentActiveBlankId] !== choice) return;
     if (activeBlankIndex < blanks.length) {
       handleSelect(currentActiveBlankId, choice);
       if (activeBlankIndex < blanks.length - 1) {
