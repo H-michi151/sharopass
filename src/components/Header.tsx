@@ -58,9 +58,8 @@ export default function Header() {
             color: 'var(--color-text)',
           }}
         >
-          <span style={{ fontSize: '1.3rem' }}>📚</span>
-          <span style={{ fontWeight: 800, fontSize: '1rem', letterSpacing: '0.05em' }}>
-            SHAROPASS
+          <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>
+            ホームに戻る
           </span>
         </button>
 
