@@ -143,7 +143,7 @@ export default function SentakuQuestion({ question }: SentakuQuestionProps) {
               >
                 <option value="">-- 選択してください --</option>
                 {allChoices.map((choice, i) => (
-                  <option key={i} value={choice}>{choice}</option>
+                  <option key={i} value={choice}>{i + 1}: {choice}</option>
                 ))}
               </select>
 
