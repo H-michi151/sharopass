@@ -9,6 +9,10 @@ const SENTAKU_SUBJECTS = [
   { id: 's6', name: '健康保険法', questionCount: 1, passingScore: 3 },
   { id: 's7', name: '厚生年金保険法', questionCount: 1, passingScore: 3 },
   { id: 's8', name: '国民年金法', questionCount: 1, passingScore: 3 },
+  { id: 's9', name: '労働保険徴収法', questionCount: 1, passingScore: 3 },
+  { id: 's10', name: '健康保険法（追加）', questionCount: 1, passingScore: 3 },
+  { id: 's11', name: '国民年金法（追加）', questionCount: 1, passingScore: 3 },
+  { id: 's12', name: '厚生年金保険法（追加）', questionCount: 1, passingScore: 3 },
 ];
 
 const TAKUITSU_SUBJECTS = [
@@ -19,6 +23,10 @@ const TAKUITSU_SUBJECTS = [
   { id: 't5', name: '健康保険法', questionCount: 10, passingScore: 4 },
   { id: 't6', name: '厚生年金保険法', questionCount: 10, passingScore: 4 },
   { id: 't7', name: '国民年金法', questionCount: 10, passingScore: 4 },
+  { id: 't8', name: '労働保険徴収法（追加）', questionCount: 10, passingScore: 4 },
+  { id: 't9', name: '健康保険法（追加）', questionCount: 10, passingScore: 4 },
+  { id: 't10', name: '国民年金法（追加）', questionCount: 10, passingScore: 4 },
+  { id: 't11', name: '厚生年金保険法（追加）', questionCount: 10, passingScore: 4 },
 ];
 
 export const SENTAKU_POOLS: Record<string, Array<{text:string; correctAnswers:string[]; additionalChoices:string[]; explanation:string}>> = {
